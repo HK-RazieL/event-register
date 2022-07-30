@@ -11,6 +11,12 @@ nav {
     background: #262626;
 }
 
+nav div {
+    display: inline;
+    float: right;
+    margin-right: 2rem;
+}
+
 nav a {
     line-height: 5rem;
     vertical-align: top;

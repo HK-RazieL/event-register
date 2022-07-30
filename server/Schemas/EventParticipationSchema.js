@@ -1,8 +1,9 @@
 const mongoose = require("mongoose");
 
 const eventParticipationSchema = new mongoose.Schema({
-    user: String,
-    event: String,
+    currentUser: String,
+    eventId: String,
+    eventName: String,
     description: String,
     date: Date,
 });

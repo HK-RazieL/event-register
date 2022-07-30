@@ -14,10 +14,24 @@ const createParticipation = (participation, setResponse) => {
         .then(res => res)
         .then(json => {
             if (json.status === 200) {
-                setResponse(`You have successfully registered for the event "${participation.event}".`);
+                setResponse(`You have successfully registered for the event "${participation.eventName}".`);
             } else {
-                setResponse(`You were not able to register for the event "${participation.event}".`);
+                setResponse(`You might already be registered for the event "${participation.eventName}".`);
             }
+        });
+}
+
+const cancelEvent = (data, setData, setResponse) => {
+    fetch("/register-for-event", {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    }).then((response) => response.json())
+        .then(json => {
+            getEvents(setData);
+            setResponse(`Event "${data.eventName}" cancelled.`);
         });
 }
 
@@ -34,10 +48,10 @@ export function EventRegistration() {
     const [response, setResponse] = useState("");
     const username = useSelector((state) => state.isLoggedIn?.username);
 
-    useEffect(() => getEvents(setData), []);
+    useEffect(() => getEvents(setData), [response]);
 
     return (
-        <div className="centered w-100">
+        <div className="centered w-100 text-center">
             <h2 className="mb-4">Register for an event</h2>
             <Table striped bordered hover variant="dark">
                 <thead>
@@ -53,22 +67,34 @@ export function EventRegistration() {
                     {data.map((event, index) => {
                         return (
                             <tr key={index}>
-                                <td>{event.user}</td>
-                                <td>{event.event}</td>
+                                <td>{event.host}</td>
+                                <td>{event.eventName}</td>
                                 <td>{event.date}</td>
                                 <td>{event.description}</td>
-                                <td>{<Button
-                                        variant="outline-danger"
-                                        onClick={() => {
-                                            let participation = {
-                                                ...event,
-                                                user: username
-                                            }
-                                            return createParticipation(participation, setResponse);
-                                        }}
-                                        style={{ width: "100%" }}
-                                    >Join</Button>
-                                    }</td>
+                                <td><Button
+                                    variant="outline-success"
+                                    onClick={() => {
+                                        let participation = {
+                                            ...event,
+                                            currentUser: username,
+                                            eventId: event._id
+                                        }
+                                        delete participation._id;
+                                        createParticipation(participation, setResponse);
+                                    }}
+                                    style={{ width: "50%" }}
+                                >Join</Button>
+                                    {username === event.host ?
+                                        <Button
+                                            variant="outline-danger"
+                                            onClick={() => {
+                                                cancelEvent(event, setData, setResponse)
+                                            }}
+                                            style={{ width: "50%" }}
+                                        >Cancel Event</Button> :
+                                        null
+                                    }
+                                </td>
                             </tr>
                         )
                     })}

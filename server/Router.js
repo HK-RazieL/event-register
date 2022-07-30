@@ -78,11 +78,36 @@ router.get("/register-for-event", (req, res) => {
 
 router.post("/register-for-event", (req, res) => {
     const eventParticipation = new EventParticipation(req.body);
-    eventParticipation.save((err, event) => {
-        if (err && err.code === 11000) return;
+    EventParticipation.exists({ currentUser: req.body.currentUser, eventId: req.body.eventId }, (err, doc) => {
+        if (err) return console.log(err)
+        if (!doc) {
+            eventParticipation.save((err, event) => {
+                if (err) return console.error(err);
+                console.log(`-----\nA new event participation was added to the DB!\n${event}\n-----`);
+                res.send(req.status);
+            });
+        } else {
+            res.status(201).send("Already exists.");
+        }
+    })
+});
+
+router.delete("/register-for-event", (req, res) => {
+    Event.findByIdAndDelete(req.body._id, (err, result) => {
         if (err) return console.error(err);
-        console.log(`-----\nA new event participation was added to the DB!\n${event}\n-----`);
-        res.send(req.status);
+
+        if (!result) {
+            res.status(404).send("No events found");
+            return console.error("No events found");
+        } else if (req.body.host === result.host) {
+            console.log(`-----\nUser ${req.body.username} deleted an event with ID: ${req.body._id}\n-----`);
+            EventParticipation.deleteMany({eventId: req.body._id}, (err, result) => {
+                if (err) return console.log(err);
+                res.send(result);
+            });
+        } else {
+            console.log("Deleted an event from a different user?");
+        }
     });
 });
 
@@ -91,8 +116,8 @@ router.get("/overview", (req, res) => {
         if (err) return console.error(err);
 
         if (!result) {
-            res.status(404).send("No events found");
-            return console.error("No events found");
+            res.status(404).send("No events found.");
+            return console.error("No events found.");
         }
 
         res.send(result);

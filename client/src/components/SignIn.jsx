@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { loggedIn } from "../redux/actions";
 import { connect } from "react-redux";
 import Form from "react-bootstrap/Form"
+import { Navigate } from "react-router-dom";
 
 class Login extends Component {
     loginUser = (event) => {
@@ -38,36 +39,35 @@ class Login extends Component {
     render() {
         return (
             <div className="login-screen centered">
-                
-                    <div className="auth-form">
-                        <h1>Sign In</h1>
-                        <Form method="POST" onSubmit={this.loginUser}>
-                            <Form.Group>
-                                <Form.Label>Username</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    placeholder="Username"
-                                    name="username"
-                                    onChange={this.handleChange}
-                                    autoComplete="off"
-                                    required
-                                />
-                            </Form.Group>
-                            <Form.Group>
-                                <Form.Label>Password</Form.Label>
-                                <Form.Control
-                                    type="password"
-                                    placeholder="Password"
-                                    name="password"
-                                    onChange={this.handleChange}
-                                    autoComplete="off"
-                                    required
-                                />
-                            </Form.Group>
-                            <input type="submit" value="Sign In" />
-                        </Form>
-                    </div>
-                
+                <div className="auth-form">
+                    <h1>Sign In</h1>
+                    <Form method="POST" onSubmit={this.loginUser}>
+                        <Form.Group>
+                            <Form.Label>Username</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="Username"
+                                name="username"
+                                onChange={this.handleChange}
+                                autoComplete="off"
+                                required
+                            />
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label>Password</Form.Label>
+                            <Form.Control
+                                type="password"
+                                placeholder="Password"
+                                name="password"
+                                onChange={this.handleChange}
+                                autoComplete="off"
+                                required
+                            />
+                        </Form.Group>
+                        <input type="submit" value="Sign In" />
+                    </Form>
+                </div>
+                {this.props.isLoggedIn?.status ? <Navigate to="/overview" /> : null}
             </div>
         );
     }

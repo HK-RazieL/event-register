@@ -16,7 +16,7 @@ const cancelRegistration = (currentEvent, username, data, setData) => {
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({ eventId: currentEvent, username: username })
+        body: JSON.stringify({ eventId: currentEvent, currentUser: username })
     }).then((response) => response.json())
         .then(json => {
             setData(data.filter((event) => event._id !== currentEvent));
@@ -56,11 +56,11 @@ export default function Overview() {
                         if (filter === "All" || filter === event.event) {
                             return (
                                 <tr key={index}>
-                                    <td>{event.user}</td>
-                                    <td>{event.event}</td>
+                                    <td>{event.currentUser}</td>
+                                    <td>{event.eventName}</td>
                                     <td>{event.date}</td>
                                     <td>{event.description}</td>
-                                    <td>{currentUser === event.user
+                                    <td>{currentUser === event.currentUser
                                         ? <Button
                                             variant="outline-danger"
                                             onClick={() => {

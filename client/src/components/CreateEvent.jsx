@@ -23,7 +23,7 @@ const createEvent = (data, setResponse) => {
         .then(res => res)
         .then(json => {
             if (json.status === 200) {
-                setResponse(`You have successfully created an event "${data.eventType}".`);
+                setResponse(`You have successfully created an event "${data.eventName}".`);
             } else {
                 setResponse(`You were not able to create the event.`);
             }
@@ -33,8 +33,8 @@ const createEvent = (data, setResponse) => {
 export function EventRegistration() {
     const username = useSelector((state) => state.isLoggedIn?.username);
     const [data, setData] = useState({
-        user: username,
-        event: "",
+        host: username,
+        eventName: "",
         date: null,
         description: ""
     });
@@ -55,7 +55,7 @@ export function EventRegistration() {
                     className="standard-button-height" onChange={(e) => {
                         setData({
                             ...data,
-                            event: e.target.value
+                            eventName: e.target.value
                         })
                     }} >
                         <option>-----</option>
