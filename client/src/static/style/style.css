@@ -59,6 +59,23 @@ nav img {
     text-align: center;
 }
 
+.create-event-form {
+    border: 1px solid black;
+    background: var(--card-color);
+    padding: 20px;
+    text-align: center;
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
+.create-event-form div {
+    background: var(--card-color);
+    padding: 5px;
+    text-align: center;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
 .event-register-form select {
     width: 200px;
 }

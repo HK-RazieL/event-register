@@ -15,6 +15,7 @@ db.once("open", () => {
 });
 
 const User = require("./Schemas/UserSchema");
+const EventParticipation = require("./Schemas/EventParticipationSchema");
 const Event = require("./Schemas/EventSchema");
 
 var router = express.Router();
@@ -23,7 +24,7 @@ router.post("/create-user", (req, res) => {
     const user = new User(req.body);
     user.password = hash(user.password);
 
-    User.findOne({username: user.username}, (err, result) => {
+    User.findOne({ username: user.username }, (err, result) => {
         if (result) {
             res.status(409).send("Username already exists");
             return console.error("Username already exists");
@@ -37,7 +38,7 @@ router.post("/create-user", (req, res) => {
 });
 
 router.post("/login-user", (req, res) => {
-    User.findOne({username: req.body.username}, (err, result) => {
+    User.findOne({ username: req.body.username }, (err, result) => {
         if (err) return console.error(err);
 
         if (!result) {
@@ -53,7 +54,7 @@ router.post("/login-user", (req, res) => {
     });
 });
 
-router.post("/register-for-event", (req, res) => {
+router.post("/create-event", (req, res) => {
     const event = new Event(req.body);
     event.save((err, event) => {
         if (err) return console.error(err);
@@ -62,7 +63,7 @@ router.post("/register-for-event", (req, res) => {
     });
 });
 
-router.get("/overview", (req, res) => {
+router.get("/register-for-event", (req, res) => {
     Event.find({}, (err, result) => {
         if (err) return console.error(err);
 
@@ -75,15 +76,38 @@ router.get("/overview", (req, res) => {
     });
 });
 
+router.post("/register-for-event", (req, res) => {
+    const eventParticipation = new EventParticipation(req.body);
+    eventParticipation.save((err, event) => {
+        if (err && err.code === 11000) return;
+        if (err) return console.error(err);
+        console.log(`-----\nA new event participation was added to the DB!\n${event}\n-----`);
+        res.send(req.status);
+    });
+});
+
+router.get("/overview", (req, res) => {
+    EventParticipation.find({}, (err, result) => {
+        if (err) return console.error(err);
+
+        if (!result) {
+            res.status(404).send("No events found");
+            return console.error("No events found");
+        }
+
+        res.send(result);
+    });
+});
+
 router.delete("/overview", (req, res) => {
-    Event.findByIdAndDelete(req.body.eventId, (err, result) => {
+    EventParticipation.findByIdAndDelete(req.body.eventId, (err, result) => {
         if (err) return console.error(err);
 
         if (!result) {
             res.status(404).send("No events found");
             return console.error("No events found");
         } else if (req.body.username === result.user) {
-            console.log(`-----\nUser ${req.body.username} deleted an event with ID: ${req.body.eventId}\n-----`);
+            console.log(`-----\nUser ${req.body.username} deleted an event participation with ID: ${req.body.eventId}\n-----`);
             res.send(result);
         } else {
             console.log("Deleted an event from a different user?");

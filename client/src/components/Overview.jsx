@@ -25,6 +25,7 @@ const cancelRegistration = (currentEvent, username, data, setData) => {
 
 export default function Overview() {
     const [data, setData] = useState([]);
+    const [filter, setFilter] = useState("All");
     const currentUser = useSelector(state => state.isLoggedIn?.username);
 
     useEffect(() => {
@@ -34,35 +35,43 @@ export default function Overview() {
     return (
         <div className="overview centered w-100">
             <h1 className="text-center mb-5">Events Overview</h1>
+            <select className="standard-button-height" onChange={(e) => setFilter(e.target.value)}>
+                <option>All</option>
+                <option>Annual party</option>
+                <option>Intro course to React.js</option>
+                <option>Learning in databases</option>
+            </select>
             <Table striped bordered hover variant="dark">
                 <thead>
                     <tr>
                         <td>User</td>
                         <td>Event</td>
-                        <td>Date</td>
+                        <td>Date of event</td>
                         <td>Description</td>
                         <td></td>
                     </tr>
                 </thead>
                 <tbody>
                     {data.map((event, index) => {
-                        return (
-                            <tr key={index}>
-                                <td>{event.user}</td>
-                                <td>{event.event}</td>
-                                <td>{event.date}</td>
-                                <td>{event.description}</td>
-                                <td>{currentUser === event.user
-                                    ? <Button
-                                        variant="outline-danger"
-                                        onClick={() => {
-                                            return cancelRegistration(event._id, currentUser, data, setData);
-                                        }}
-                                        style={{ width: "100%" }}
-                                    >X</Button>
-                                    : ""}</td>
-                            </tr>
-                        )
+                        if (filter === "All" || filter === event.event) {
+                            return (
+                                <tr key={index}>
+                                    <td>{event.user}</td>
+                                    <td>{event.event}</td>
+                                    <td>{event.date}</td>
+                                    <td>{event.description}</td>
+                                    <td>{currentUser === event.user
+                                        ? <Button
+                                            variant="outline-danger"
+                                            onClick={() => {
+                                                return cancelRegistration(event._id, currentUser, data, setData);
+                                            }}
+                                            style={{ width: "100%" }}
+                                        >X</Button>
+                                        : ""}</td>
+                                </tr>
+                            )
+                        }
                     })}
                 </tbody>
             </Table>

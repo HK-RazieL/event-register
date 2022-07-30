@@ -5,7 +5,8 @@ import { connect } from "react-redux";
 import SignUp from "./SignUp";
 import Login from "./SignIn";
 import Overview from "./Overview";
-import EventRegistration from './RegisterForEvent';
+import EventRegistration from "./RegisterForEvent";
+import CreateEvent from "./CreateEvent"
 
 class Navbar extends Component {
     logOut = () => {
@@ -17,6 +18,7 @@ class Navbar extends Component {
             <>
                 <Router>
                     <nav>
+                        <Link to="/overview">Overview</Link>
                         {!this.props.isLoggedIn?.status ?
                             <>
                                 <Link to="/create-user">Sign Up</Link>
@@ -25,21 +27,22 @@ class Navbar extends Component {
                             :
                             <>
                                 <Link to="/register-for-event">Register For Event</Link>
-                                <Link to="/overview">Overview</Link>
+                                <Link to="/create-event">Create Event</Link>
                                 <Link to="/login-user" onClick={this.logOut}>Log Out</Link>
                             </>
                         }
                     </nav>
                     <Routes>
-                        <Route exact path="/overview" element={
-                            !this.props.isLoggedIn
-                                ? <Navigate replace to="/login-user" />
-                                : <Overview />
-                        } />
+                        <Route exact path="/overview" element={<Overview />} />
                         <Route exact path="/register-for-event" element={
                             !this.props.isLoggedIn
                                 ? <Navigate replace to="/login-user" />
                                 : <EventRegistration />
+                        } />
+                        <Route exact path="/create-event" element={
+                            !this.props.isLoggedIn
+                                ? <Navigate replace to="/login-user" />
+                                : <CreateEvent />
                         } />
                         <Route exact path="/create-user" element={<SignUp />} />
                         <Route exact path="/login-user" element={<Login />} />

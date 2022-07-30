@@ -1,55 +1,80 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import Form from "react-bootstrap/Form";
+import Table from "react-bootstrap/Table";
+import Button from "react-bootstrap/Button";
 
-const eventRegistrationAction = (selectedEvent, username, setResponse) => {
-    if (selectedEvent === "-----" || selectedEvent === "") {
-        setResponse("Please select an event.");
-        return;
-    };
-
+const createParticipation = (participation, setResponse) => {
     fetch("/register-for-event", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({ event: selectedEvent, user: username, date: new Date, description: "" })
+        body: JSON.stringify(participation)
     })
         .then(res => res)
         .then(json => {
             if (json.status === 200) {
-                setResponse(`You have successfully registered for the event "${selectedEvent}".`);
+                setResponse(`You have successfully registered for the event "${participation.event}".`);
             } else {
-                setResponse(`You were not able to register for the event "${selectedEvent}".`);
+                setResponse(`You were not able to register for the event "${participation.event}".`);
             }
         });
 }
 
+const getEvents = (setData) => {
+    fetch("/register-for-event")
+        .then(res => res.json())
+        .then(json => {
+            setData(json)
+        });
+}
+
 export function EventRegistration() {
-    const [selectedEvent, setSelectedEvent] = useState("");
+    const [data, setData] = useState([])
     const [response, setResponse] = useState("");
     const username = useSelector((state) => state.isLoggedIn?.username);
 
+    useEffect(() => getEvents(setData), []);
+
     return (
-        <div className="event-register-form centered">
-            <h2 className="mb-4">Register for event</h2>
-            <Form className="mb-3" method="POST" onSubmit={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                eventRegistrationAction(selectedEvent, username, setResponse);
-            }}>
-                <select
-                className="standard-button-height"
-                onChange={(e) => {
-                    setSelectedEvent(e.target.selectedOptions[0].innerText);
-                }}>
-                    <option>-----</option>
-                    <option>Annual party</option>
-                    <option>Intro course to React.js</option>
-                    <option>Learning in databases</option>
-                </select>
-                <input className="standard-button-height" type="submit" value="Register" />
-            </Form>
+        <div className="centered w-100">
+            <h2 className="mb-4">Register for an event</h2>
+            <Table striped bordered hover variant="dark">
+                <thead>
+                    <tr>
+                        <td>Host</td>
+                        <td>Event</td>
+                        <td>Date of event</td>
+                        <td>Description</td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {data.map((event, index) => {
+                        return (
+                            <tr key={index}>
+                                <td>{event.user}</td>
+                                <td>{event.event}</td>
+                                <td>{event.date}</td>
+                                <td>{event.description}</td>
+                                <td>{<Button
+                                        variant="outline-danger"
+                                        onClick={() => {
+                                            console.log(event)
+                                            let participation = {
+                                                ...event,
+                                                user: username
+                                            }
+                                            return createParticipation(participation, setResponse);
+                                        }}
+                                        style={{ width: "100%" }}
+                                    >Join</Button>
+                                    }</td>
+                            </tr>
+                        )
+                    })}
+                </tbody>
+            </Table>
             {response ? <div>{response}</div> : null}
         </div>
     )

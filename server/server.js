@@ -7,7 +7,7 @@ const port = 5000;
 const cors = require("cors");
 
 app.use(cors());
-app.use(session({secret: "Shh, its a secret!"}));
+app.use(session({ secret: "Shh, its a secret!" }));
 app.use(express.json({ extended: true }));
 app.use("/", router);
 
