@@ -83,3 +83,7 @@ nav img {
 .standard-button-height {
     height: 30px;
 }
+
+.success-message {
+    color: green;
+}

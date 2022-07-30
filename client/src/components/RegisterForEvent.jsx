@@ -60,7 +60,6 @@ export function EventRegistration() {
                                 <td>{<Button
                                         variant="outline-danger"
                                         onClick={() => {
-                                            console.log(event)
                                             let participation = {
                                                 ...event,
                                                 user: username
@@ -75,7 +74,7 @@ export function EventRegistration() {
                     })}
                 </tbody>
             </Table>
-            {response ? <div>{response}</div> : null}
+            {response ? <h3 className="success-message">{response}</h3> : null}
         </div>
     )
 }

@@ -38,7 +38,7 @@ class Login extends Component {
     render() {
         return (
             <div className="login-screen centered">
-                {!this.props.isLoggedIn ?
+                
                     <div className="auth-form">
                         <h1>Sign In</h1>
                         <Form method="POST" onSubmit={this.loginUser}>
@@ -67,10 +67,7 @@ class Login extends Component {
                             <input type="submit" value="Sign In" />
                         </Form>
                     </div>
-                    : <div className="card">
-                        <h1>You have successfully logged in!</h1>
-                    </div>
-                }
+                
             </div>
         );
     }

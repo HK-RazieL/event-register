@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import Form from "react-bootstrap/Form";
 
 const createEvent = (data, setResponse) => {
-    if (data.eventType === "-----" || data.eventType === "") {
+    if (data.event === "-----" || data.event === "") {
         setResponse("Please select an event type.");
         return;
     };
@@ -47,10 +47,12 @@ export function EventRegistration() {
                 e.stopPropagation();
                 createEvent(data, setResponse);
             }}>
-                <h2 className="mb-4">Register for event</h2>
+                <h2 className="mb-4">Register an event</h2>
                 <Form.Group>
                     <Form.Label>Event Type</Form.Label>
-                    <select className="standard-button-height" onChange={(e) => {
+                    <select
+                    required
+                    className="standard-button-height" onChange={(e) => {
                         setData({
                             ...data,
                             event: e.target.value
@@ -73,7 +75,12 @@ export function EventRegistration() {
                 </Form.Group>
                 <Form.Group>
                     <Form.Label>Description</Form.Label>
-                    <textarea rows="10" cols="50" style={{ resize: "none" }} onChange={(e) => {
+                    <textarea
+                    rows="10"
+                    cols="50"
+                    style={{ resize: "none" }}
+                    required
+                    onChange={(e) => {
                         setData({
                             ...data,
                             description: e.target.value
@@ -82,7 +89,7 @@ export function EventRegistration() {
                 </Form.Group>
                 <input className="standard-button-height" type="submit" value="Create" />
             </Form>
-            {response ? <div>{response}</div> : null}
+            {response ? <div className="d-flex text-center justify-content-center">{response}</div> : null}
         </div>
     )
 }

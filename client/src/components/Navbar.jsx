@@ -19,18 +19,13 @@ class Navbar extends Component {
                 <Router>
                     <nav>
                         <Link to="/overview">Overview</Link>
-                        {!this.props.isLoggedIn?.status ?
-                            <>
-                                <Link to="/create-user">Sign Up</Link>
-                                <Link to="/login-user">Sign In</Link>
-                            </>
-                            :
-                            <>
-                                <Link to="/register-for-event">Register For Event</Link>
-                                <Link to="/create-event">Create Event</Link>
-                                <Link to="/login-user" onClick={this.logOut}>Log Out</Link>
-                            </>
-                        }
+                        <Link to="/register-for-event">Register For Event</Link>
+                        <Link to="/create-event">Create Event</Link>
+                        <Link to="/create-user">Sign Up</Link>
+
+                        <Link to="/login-user">Sign In</Link>
+                        
+                        <Link to="/login-user" onClick={this.logOut}>Log Out</Link>
                     </nav>
                     <Routes>
                         <Route exact path="/overview" element={<Overview />} />
@@ -60,3 +55,10 @@ const mapStateToProps = (state) => {
 }
 
 export default connect(mapStateToProps)(Navbar);
+
+
+/*
+fix logout button
+fix login redirect
+add close event button
+*/
