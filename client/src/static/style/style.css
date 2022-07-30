@@ -1,0 +1,68 @@
+:root {
+    --card-color: rgb(220, 220, 220);
+}
+
+body {
+    margin: 0;
+    background:rgba(239, 208, 208, 0.83)
+}
+
+nav {
+    background: #262626;
+}
+
+nav a {
+    line-height: 5rem;
+    vertical-align: top;
+    display: inline-block;
+    text-decoration: none;
+    margin-left: 4rem;
+    color: #f4f4f4;
+    position: relative;
+}
+
+nav a:after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    transform: scaleX(0);
+    height: 4px;
+    bottom: 0;
+    left: 0;
+    background-color: orange;
+    transform-origin: bottom right;
+    transition: transform 0.25s ease-out;
+}
+
+nav a:hover:after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+}
+
+nav img {
+    height: 5rem;
+    padding: 0;
+    margin: 0;
+}
+
+.centered {
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.event-register-form {
+    border: 1px solid black;
+    background: var(--card-color);
+    padding: 20px;
+    text-align: center;
+}
+
+.event-register-form select {
+    width: 200px;
+}
+
+.standard-button-height {
+    height: 30px;
+}
