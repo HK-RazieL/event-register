@@ -53,7 +53,7 @@ export default function Overview() {
                 </thead>
                 <tbody>
                     {data.map((event, index) => {
-                        if (filter === "All" || filter === event.event) {
+                        if (filter === "All" || filter === event.eventName) {
                             return (
                                 <tr key={index}>
                                     <td>{event.currentUser}</td>

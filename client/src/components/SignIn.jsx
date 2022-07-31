@@ -5,6 +5,10 @@ import Form from "react-bootstrap/Form"
 import { Navigate } from "react-router-dom";
 
 class Login extends Component {
+    state = {
+        status: ""
+    }
+
     loginUser = (event) => {
         event.preventDefault();
         event.stopPropagation();
@@ -16,7 +20,7 @@ class Login extends Component {
             },
             body: JSON.stringify(this.state)
         }).then((res) => {
-            return res.json()
+            return res.json();
         }).then((json) => {
             this.props.dispatch(loggedIn({
                 type: "LOGGED_IN",
@@ -25,6 +29,10 @@ class Login extends Component {
                     status: true
                 }
             }));
+        }).catch(() => {
+            this.setState({
+                status: "No user found!"
+            });
         });
     }
 
@@ -65,6 +73,9 @@ class Login extends Component {
                             />
                         </Form.Group>
                         <input type="submit" value="Sign In" />
+                        {
+                            this.state.status ? <div style={{ color: "red" }}>{this.state.status}</div> : ""
+                        }
                     </Form>
                 </div>
                 {this.props.isLoggedIn?.status ? <Navigate to="/overview" /> : null}
