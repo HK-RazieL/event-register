@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import Form from "react-bootstrap/Form";
 
 const createEvent = (data, setResponse) => {
-    if (data.event === "-----" || data.event === "") {
+    if (data.eventName === "-----" || data.eventName === "") {
         setResponse("Please select an event type.");
         return;
     };

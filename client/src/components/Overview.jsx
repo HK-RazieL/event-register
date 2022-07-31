@@ -43,22 +43,23 @@ export default function Overview() {
             </select>
             <Table striped bordered hover variant="dark">
                 <thead>
-                    <tr>
+                    <tr className="text-center">
                         <td>User</td>
                         <td>Event</td>
                         <td>Date of event</td>
                         <td>Description</td>
-                        <td></td>
+                        <td>Cancel</td>
                     </tr>
                 </thead>
                 <tbody>
                     {data.map((event, index) => {
                         if (filter === "All" || filter === event.eventName) {
+                            let date = new Date(event.date);
                             return (
                                 <tr key={index}>
                                     <td>{event.currentUser}</td>
                                     <td>{event.eventName}</td>
-                                    <td>{event.date}</td>
+                                    <td>{date.toLocaleString()}</td>
                                     <td>{event.description}</td>
                                     <td>{currentUser === event.currentUser
                                         ? <Button

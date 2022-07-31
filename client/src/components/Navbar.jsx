@@ -23,7 +23,11 @@ class Navbar extends Component {
                         <Link to="/create-event">Create Event</Link>
                         <div>
                             {this.props.isLoggedIn?.status ?
-                                <Link to="/login-user" onClick={this.logOut}>Log Out</Link> :
+                                <>
+                                    <span className="text-light">Welcome, {this.props.isLoggedIn?.username}!</span>
+                                    <Link to="/login-user" onClick={this.logOut}>Log Out</Link>
+                                </>
+                                :
                                 <>
                                     <Link to="/create-user">Sign Up</Link>
                                     <Link to="/login-user">Sign In</Link>

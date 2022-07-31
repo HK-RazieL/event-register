@@ -51,27 +51,28 @@ export function EventRegistration() {
     useEffect(() => getEvents(setData), [response]);
 
     return (
-        <div className="centered w-100 text-center">
+        <div className="centered w-100">
             <h2 className="mb-4">Register for an event</h2>
             <Table striped bordered hover variant="dark">
                 <thead>
-                    <tr>
+                    <tr className="text-center">
                         <td>Host</td>
                         <td>Event</td>
                         <td>Date of event</td>
                         <td>Description</td>
-                        <td></td>
+                        <td>Join/Cancel</td>
                     </tr>
                 </thead>
                 <tbody>
                     {data.map((event, index) => {
+                        let date = new Date(event.date);                        
                         return (
                             <tr key={index}>
                                 <td>{event.host}</td>
                                 <td>{event.eventName}</td>
-                                <td>{event.date}</td>
+                                <td>{date.toLocaleString()}</td>
                                 <td>{event.description}</td>
-                                <td><Button
+                                <td className="text-center"><Button
                                     variant="outline-success"
                                     onClick={() => {
                                         let participation = {
